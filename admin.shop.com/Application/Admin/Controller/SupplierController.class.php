@@ -14,7 +14,13 @@ class SupplierController extends \Think\Controller {
     }
     //显示
     public function index(){
-        $this->assign('rows',M('Supplier')->where(array('status'=>array('egt',0)))->select());
+        $cond=array();//条件数组
+        if(I('get.seach_name')){
+            $cond['name']=array('like','%'.I('get.seach_name').'%');//搜索关键字的条件
+            //dump($this->_model->getPageResult($cond));exit;
+        }
+//        dump($this->_model->getPageResult($cond));exit;
+        $this->assign($this->_model->getPageResult($cond));
         $this->display();
     }
     //添加

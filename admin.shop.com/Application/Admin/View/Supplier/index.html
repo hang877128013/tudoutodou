@@ -4,8 +4,9 @@
 <title>供货商 管理中心 - {$meta_title}</title>
 <meta name="robots" content="noindex, nofollow">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="__CSS__/general.css" rel="stylesheet" type="text/css" />
-<link href="__CSS__/main.css" rel="stylesheet" type="text/css" />
+<css href="__CSS__/page.css"/>
+<css href="__CSS__/main.css"/>
+<css href="__CSS__/general.css"/>
 </head>
 <body>
 <h1>
@@ -15,9 +16,9 @@
     <div style="clear:both"></div>
 </h1>
 <div class="form-div">
-    <form action="" name="searchForm">
+    <form action="{:U()}" method="get" name="searchForm">
     <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="search" />
-    <input type="text" name="brand_name" size="15" />
+    <input type="text" name="seach_name" size="15" />
     <input type="submit" value=" 搜索 " class="button" />
     </form>
 </div>
@@ -46,7 +47,7 @@
             </foreach>
             <tr>
                 <td align="right" nowrap="true" colspan="6">
-                    <div id="turn-page">
+                    <div class="page" id="turn-page">
                         {$page_html}
                     </div>
                 </td>

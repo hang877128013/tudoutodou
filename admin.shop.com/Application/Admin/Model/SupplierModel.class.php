@@ -6,17 +6,16 @@ class SupplierModel extends \Think\Model {
         array('name','','供应商已存在',self::EXISTS_VALIDATE,'unique',self::MODEL_INSERT),
     );
         public function getPageResult(array $cond=array()){
-        $cond = $cond + array(
-            'status'=>array('gt',-1),
-        );
+        $cond =$cond+array( 'status'=>array('gt',-1));//条件:status大于-1 和搜索关键字条件
         //获取总行数
         $count = $this->where($cond)->count();
-        //获取页尺寸
-        $size = C('PAGE_SIZE');
-        $page_obj = new \Think\Page($count,$size);
-        $page_obj->setConfig('theme', C('PAGE_THEME'));
-        $page_html = $page_obj->show();
+       // return $count;
+        $size = C('PAGE_SIZE');//获取每页显示数
+        $page_obj = new \Think\Page($count,$size);//创建分页模型
+        $page_obj->setConfig('theme', C('PAGE_THEME'));//设置分页属性
+        $page_html = $page_obj->show();//显示分页
         $rows = $this->where($cond)->page(I('get.p'),$size)->select();
+        //return $rows;
         return array(
             'rows'=>$rows,
             'page_html'=>$page_html,
