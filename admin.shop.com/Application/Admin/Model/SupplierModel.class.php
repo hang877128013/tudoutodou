@@ -9,7 +9,6 @@ class SupplierModel extends \Think\Model {
         $cond =$cond+array( 'status'=>array('gt',-1));//条件:status大于-1 和搜索关键字条件
         //获取总行数
         $count = $this->where($cond)->count();
-       // return $count;
         $size = C('PAGE_SIZE');//获取每页显示数
         $page_obj = new \Think\Page($count,$size);//创建分页模型
         $page_obj->setConfig('theme', C('PAGE_THEME'));//设置分页属性

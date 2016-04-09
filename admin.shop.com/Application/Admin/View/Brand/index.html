@@ -4,8 +4,9 @@
     <div class="list-div" id="listDiv">
         <table cellpadding="3" cellspacing="1">
             <tr>
-                <th>供货商</th>
-                <th>供货商介绍</th>
+                <th>品牌</th>
+                <th>品牌介绍</th>
+                <th>所属供应商</th>
                 <th>排序</th>
                 <th>是否显示</th>
                 <th>操作</th>
@@ -14,6 +15,9 @@
             <tr>
                 <td>{$row.name}</td>
                 <td>{$row.intro}</td>
+                <td>
+                   {$suppliers[$row["parent_id"]]["name"]}
+                </td>
                 <td>{$row.sort}</td>
                 <td><img src="__IMG__/{$row.status}.gif" /></td>
                 <td align="center">

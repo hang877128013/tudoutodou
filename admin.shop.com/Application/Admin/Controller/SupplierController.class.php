@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Controller;
 class SupplierController extends \Think\Controller {
+        protected $_model=null;
         protected function _initialize() {
         $meta_titles = array(
             'index'  => '供货商管理',
