@@ -4,18 +4,19 @@
     <form method="post" action="{:U()}"enctype="multipart/form-data" >
         <table cellspacing="1" cellpadding="3" width="100%">
             <tr>
-                <td class="label">供货商名称</td>
+                <td class="label">分类名称</td>
                 <td>
                     <input type="text" name="name" maxlength="60" value="{$rows.name}" />
                     <span class="require-field">*</span>
                 </td>
             </tr>
             <tr>
-                <td class="label">供货商描述</td>
+                <td class="label">分类简介</td>
                 <td>
                     <textarea  name="intro" cols="60" rows="4"  >{$rows.intro}</textarea>
                 </td>
             </tr>
+            
             <tr>
                 <td class="label">排序</td>
                 <td>
@@ -27,6 +28,13 @@
                 <td>
                     <input type="radio" name="status" value="1" checked="checked" /> 是
                     <input type="radio" name="status" value="0"  /> 否(当品牌下还没有商品的时候，首页及分类页的品牌区将不会显示该品牌。)
+                </td>
+            </tr>
+             <tr>
+                <td class="label">是否是帮助相关的分类</td>
+                <td>
+                    <input type="radio" name="is_help" value="1" checked="checked" /> 是
+                    <input type="radio" name="is_help" value="0"  /> 否
                 </td>
             </tr>
             <tr>
@@ -44,7 +52,8 @@
     <js href='__JS__/jquery.min.js'/>
     <script type='text/javascript'>
         $(function(){
-            $(':input[name=status]').val([{$row.status|default=1}]);
+            $(':input[name=status]').val([{$rows.status|default=1}]);
+            $(':input[name=is_help]').val([{$rows.is_help|default=1}]);
         });
     </script>
 </block>

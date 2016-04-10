@@ -1,0 +1,42 @@
+<extend name="common"/>
+<block name="content">
+<form method="post" action="{;U()}" name="listForm">
+    <div class="list-div" id="listDiv">
+        <table cellpadding="3" cellspacing="1">
+            <tr>
+                <th>标题</th>
+                <th>文章介绍</th>
+                <th>所属分类</th>
+                <th>排序</th>
+                <th>录入时间</th>
+                <th>是否显示</th>
+                <th>操作</th>
+            </tr>
+            <foreach name="rows" item="row">
+            <tr>
+                <td>{$row.name}</td>
+                <td>{$row.intro}</td>
+                <td>
+                   {$categorys[$row["article_category_id"]-1]["name"]}
+                </td>
+                <td>{$row.sort}</td>
+                <td>{:date('Y-m-d H:i:s',$row['inputtime'])}</td>
+                <td><img src="__IMG__/{$row.status}.gif" /></td>
+                <td align="center">
+                    <a href="{:U('edit',array('id'=>$row['id']))}" title="编辑">编辑</a> |
+                <a href="{:U('delete',array('id'=>$row['id']))}" title="移除">移除</a> 
+                </td>
+            </tr>
+                    
+            </foreach>
+            <tr>
+                <td align="right" nowrap="true" colspan="6">
+                    <div class="page" id="turn-page">
+                        {$page_html}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
+</block>

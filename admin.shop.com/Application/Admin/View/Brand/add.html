@@ -51,3 +51,11 @@
     </form>
 </div>
 </block>
+<block name='js'>
+    <js href='__JS__/jquery.min.js'/>
+    <script type='text/javascript'>
+        $(function(){
+            $(':input[name=status]').val([{$row.status|default=1}]);
+        });
+    </script>
+</block>

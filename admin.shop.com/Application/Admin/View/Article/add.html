@@ -4,16 +4,33 @@
     <form method="post" action="{:U()}"enctype="multipart/form-data" >
         <table cellspacing="1" cellpadding="3" width="100%">
             <tr>
-                <td class="label">供货商名称</td>
+                <td class="label">文章标题</td>
                 <td>
                     <input type="text" name="name" maxlength="60" value="{$rows.name}" />
                     <span class="require-field">*</span>
                 </td>
             </tr>
             <tr>
-                <td class="label">供货商描述</td>
+                <td class="label">文章简介</td>
                 <td>
                     <textarea  name="intro" cols="60" rows="4"  >{$rows.intro}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">文章内容</td>
+                <td>
+                    <textarea  name="content" cols="60" rows="4"  >{$content.content}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">文章分类</td>
+                <td>
+                    <select name="article_category_id">
+                    <foreach name="articles" item="article">
+                         <!--<if condition='in_array($rows,$supplier["id"])'>selected="selected"</if>-->
+                        <option value="{$article.id}">{$article.name}</option>
+                    </foreach>
+                </select>
                 </td>
             </tr>
             <tr>
