@@ -1,0 +1,107 @@
+<extend name="Layou:common"/>
+<block name="content">
+<h1>
+    <span class="action-span"><a href="{:U('add')}">添加品牌</a></span>
+    <span class="action-span1"><a href="{:U('index')}">品牌 管理中心</a></span>
+    <span id="search_id" class="action-span1"> - {$meta_title} </span>
+    <div style="clear:both"></div>
+</h1>
+    <form method="post" action="{:U()}"enctype="multipart/form-data" >
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <tr>
+                <td class="label">分类名称</td>
+                <td>
+                    <input type="text" name="name" maxlength="60" value="{$rows.name}" />
+                    <span class="require-field">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">分类描述</td>
+                <td>
+                    <textarea  name="intro" cols="60" rows="4"  >{$rows.intro}</textarea>
+                </td>
+            </tr>
+            <tr>
+                    <td class="label">父级分类</td>
+                    <td>
+                        <input type="hidden" name="parent_id" id="parent_id"/>
+                        <input type="text" disabled="disabled" id="parent_name" value="请选择"/>
+                        <ul id="treeDemo" class="ztree"></ul>
+                    </td>
+                </tr>
+            <tr>
+                <td class="label">排序</td>
+                <td>
+                    <input type="text" name="sort" maxlength="40" size="15" value="{$rows.0.sort|default=50}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label">是否显示</td>
+                <td>
+                    <input type="radio" name="status" value="1" checked="checked" /> 是
+                    <input type="radio" name="status" value="0"  /> 否(当品牌下还没有商品的时候，首页及分类页的品牌区将不会显示该品牌。)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><br />
+                    <input type="hidden" name='id' value="{$rows.id}" />
+                    <input type="submit" class="button" value=" 确定 " />
+                    <input type="reset" class="button" value=" 重置 " />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</block>
+<block name='js'>
+    <js href='__JS__/jquery.min.js'/>
+    <js href='__ZTREE__/js/jquery.ztree.core.min.js'/>
+    <script type='text/javascript'>
+        //准备配置选项数据
+        var setting = {
+            data: {
+                simpleData: {
+                    enable: true,
+                    pIdKey:'parent_id',//告知ztree父级分类标识不是pId而是parent_id
+                }
+            },
+            callback:{
+              onClick:function (event,tree_id,tree_node){
+                //获得ID和name
+                $('#parent_id').val(tree_node.id);
+                $('#parent_name').val(tree_node.name);
+              },
+            },
+        };
+
+        var zNodes = {$goods};
+        
+        $(function () {
+            $(':input[name=status]').val([{$rows.status | default = 1}]);
+                //初始化节点
+            var ztree_obj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            ztree_obj.expandAll(true);
+            
+            var parent_node= ztree_obj.getNodesByParam('id',{$rows.parent_id|default=0});
+            if(parent_node.length>0){
+                 ztree_obj.selectNode(parent_node[0]);
+                 $("#parent_name").val(parent_node[0].name);
+                 $("#parent_id").val(parent_node[0].id);
+            }
+           
+            
+        }); </script>
+</block>
+<block name="CSS">
+    <css href="__ZTREE__/css/zTreeStyle/zTreeStyle.css"/>
+    <style type="text/css">
+        ul.ztree{
+            margin-top: 10px;
+            border: 1px solid #617775;
+            background: #f0f6e4;
+            width: 220px;
+            overflow-y: scroll;
+            overflow-x: auto;
+        }
+    </style>
+</block>

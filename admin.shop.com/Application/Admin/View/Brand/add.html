@@ -1,5 +1,18 @@
-<extend name="common"/>
+<extend name="Layou:common"/>
 <block name="content">
+<h1>
+    <span class="action-span"><a href="{:U('add')}">添加品牌</a></span>
+    <span class="action-span1"><a href="{:U('index')}">品牌 管理中心</a></span>
+    <span id="search_id" class="action-span1"> - {$meta_title} </span>
+    <div style="clear:both"></div>
+</h1>
+<div class="form-div">
+    <form action="{:U()}" method="get" name="searchForm">
+    <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="search" />
+    <input type="text" name="seach_name" size="15" />
+    <input type="submit" value=" 搜索 " class="button" />
+    </form>
+</div>
 <div class="main-div">
     <form method="post" action="{:U()}"enctype="multipart/form-data" >
         <table cellspacing="1" cellpadding="3" width="100%">
@@ -14,6 +27,15 @@
                 <td class="label">品牌描述</td>
                 <td>
                     <textarea  name="intro" cols="60" rows="4"  >{$rows.intro}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">品牌logo</td>
+                <td>
+            <empty name="rows.logo"><img src="" id="logo_preview"/></empty>
+            <notempty name="rows.logo"><br /><img src="__QINIU__/{$rows.logo}-suoxiao" id="logo_preview"/></notempty>
+                    <input id='logo' type="file"/>
+                    <input name='logo' type="hidden" value="{$rows.logo}"/>
                 </td>
             </tr>
             <tr>
@@ -53,9 +75,33 @@
 </block>
 <block name='js'>
     <js href='__JS__/jquery.min.js'/>
+    <js href="__LAYER__/layer.js" />
+    <js href='__UPLOADIFY__/jquery.uploadify.min.js'/>
     <script type='text/javascript'>
         $(function(){
             $(':input[name=status]').val([{$row.status|default=1}]);
+            $('#logo').uploadify({
+                'buttonText':'文件上传',
+               'swf'      : '__UPLOADIFY__/uploadify.swf',
+               'uploader' : '{:U("Upload/upload")}',
+               'onUploadSuccess':function(file_node,data){
+                  data = $.parseJSON(data);
+                   //判断status
+                   if(data.status){
+                     layer.msg('上传成功',{icon:6});
+                     $(':input[name=logo]').val(data.file_url);
+                     $('#logo_preview').attr('src','__QINIU__/' + data.file_url+'-suoxiao');
+                     console.debug('__QINIU__/'+data.file_url);
+                   }else{
+                       layer.msg(data.msg,{icon:5});
+                   }
+                    console.debug(data);
+},
+            });
         });
     </script>
+</block>
+    <block name='css'>
+        <css href="__UPLOADIFY__/uploadify.css"/>
+        
 </block>

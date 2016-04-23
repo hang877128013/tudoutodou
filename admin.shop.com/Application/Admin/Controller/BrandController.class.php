@@ -7,6 +7,13 @@ class BrandController extends \Think\Controller {
     protected $_model = null;
 
     protected function _initialize() {
+        if(!session('USERINFO')){
+            if(ACTION_NAME=='login'){
+                return true;
+            }
+            $this->success('请先登录',U('Admin/login'));
+            return false;
+        }
         $meta_titles = array(
             'index' => '品牌管理',
             'add' => '添加品牌',

@@ -6,6 +6,13 @@ class ArticleController extends \Think\Controller {
     protected $_model = null;
 
     protected function _initialize() {
+        if(!session('USERINFO')){
+            if(ACTION_NAME=='login'){
+                return true;
+            }
+            $this->success('请先登录',U('Admin/login'));
+            return false;
+        }
         $meta_titles = array(
             'index' => '文章管理',
             'add' => '添加文章',
@@ -56,9 +63,16 @@ class ArticleController extends \Think\Controller {
     //编辑
     public function edit($id){
         if(IS_POST){
-            
+            //获得数据
+            if ($this->_model->create() === false) {
+                $this->error(get_error($this->_model->getError()));
+            }
+            if ($this->_model->save() === false) {
+                $this->error(get_error($this->_model->getError()));
+            }
+            $this->success('修改成功', U('index'));
         }else{
-             $this->assign('articles', M('ArticleCategory')->select());
+             $this->assign('articles', M('ArticleCategory')->where(array('status'=>array('gt',-1)))->select());
              $this->assign('rows',$this->_model->find($id));
              $this->assign('content',M('ArticleContent')->find($id));
             $this->display('add');

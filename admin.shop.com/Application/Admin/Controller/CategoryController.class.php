@@ -5,6 +5,13 @@ class CategoryController extends \Think\Controller {
         protected $tablePrefix='Article_';
 
     protected function _initialize() {
+        if(!session('USERINFO')){
+            if(ACTION_NAME=='login'){
+                return true;
+            }
+            $this->success('请先登录',U('Admin/login'));
+            return false;
+        }
         $meta_titles = array(
             'index' => '分类管理',
             'add' => '添加分类',

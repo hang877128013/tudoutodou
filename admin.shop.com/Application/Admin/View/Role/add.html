@@ -1,0 +1,140 @@
+<extend name="Layou:common"/>
+<block name="content">
+<h1>
+    <span class="action-span"><a href="{:U('add')}">添加角色</a></span>
+    <span class="action-span1"><a href="{:U('index')}">角色 管理中心</a></span>
+    <span id="search_id" class="action-span1"> - {$meta_title} </span>
+    <div style="clear:both"></div>
+</h1>
+<div class="form-div">
+    <form action="{:U()}" method="get" name="searchForm">
+    <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="search" />
+    <input type="text" name="seach_name" size="15" />
+    <input type="submit" value=" 搜索 " class="button" />
+    </form>
+</div>
+<div class="main-div">
+    <form method="post" action="{:U()}"enctype="multipart/form-data" >
+        <table cellspacing="1" cellpadding="3" width="100%">
+            <tr>
+                <td class="label">角色名称</td>
+                <td>
+                    <input type="text" name="name" maxlength="60" value="{$rows.name}" />
+                    <span class="require-field">*</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">角色描述</td>
+                <td>
+                    <textarea  name="intro" cols="60" rows="4"  >{$rows.intro}</textarea>
+                </td>
+            </tr>
+            <tr>
+                    <td class="label">分配权限</td>
+                    <td>
+                        <div id="perms"></div>
+                            <ul id="treeDemo" class="ztree"></ul>
+                    </td>
+                </tr>
+            <tr>
+                <td class="label">排序</td>
+                <td>
+                    <input type="text" name="sort" maxlength="40" size="15" value="{$rows.sort|default=50}" />
+                </td>
+            </tr>
+            <tr>
+                <td class="label">是否显示</td>
+                <td>
+                    <input type="radio" name="status" value="1" checked="checked" /> 是
+                    <input type="radio" name="status" value="0"  /> 否(当品牌下还没有商品的时候，首页及分类页的品牌区将不会显示该品牌。)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><br />
+                    <input type="hidden" name='id' value="{$rows.id}" />
+                    <input type="submit" class="button" value=" 确定 " />
+                    <input type="reset" class="button" value=" 重置 " />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</block>
+<block name='js'>
+    <js href='__JS__/jquery.min.js'/>
+    <js href='__ZTREE__/js/jquery.ztree.core.min.js'/>
+    <js href='__ZTREE__/js/jquery.ztree.excheck.min.js'/>
+    <script type='text/javascript'>
+    $(function () {  
+        var perms_node = $('#perms');
+    //准备配置选项数据
+            var setting = {
+                check:{enable:true,chkboxType:{ "Y" : "s", "N" : "s" },},
+                data: {
+                    simpleData: {
+                        enable: true,
+                        pIdKey:'parent_id',//告知ztree父级分类标识不是pId而是parent_id
+                    }
+                },
+                callback:{
+                    onCheck:function(){
+                        //获取所有的被选中的选项
+                        perms_node.empty();
+                        var checked_nodes = ztree_obj.getCheckedNodes(true);
+                        $(checked_nodes).each(function(i){
+                            var half_check = this.getCheckStatus();
+                            //将半选状态的选项忽略
+                            if(!half_check.half){
+                                var html = '<input type="hidden" name="perm[]" value="' + this.id + '"/>';
+                                $(html).appendTo(perms_node);
+                            }
+                        });
+                    },
+                },
+            };
+
+        var zNodes = {$categories};
+        
+        
+            $(':input[name=status]').val([{$rows.status | default = 1}]);
+                //初始化节点
+            var ztree_obj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            ztree_obj.expandAll(true);
+            
+            var parent_node= ztree_obj.getNodesByParam('id',{$roleper.permission_id|default=0});
+            if(parent_node.length>0){
+                 ztree_obj.selectNode(parent_node[0]);
+                 $("#parent_name").val(parent_node[0].name);
+                 $("#parent_id").val(parent_node[0].id);
+            }
+            //==================回显关联的权限=============
+            <notempty name="rows">
+            var perms = {$rows.permission_ids};
+            for(i in perms){
+                var node = ztree_obj.getNodeByParam("id",perms[i]);
+                ztree_obj.checkNode(node,true);
+                var half_check = node.getCheckStatus();
+                //将半选状态的选项忽略
+                if(!half_check.half){
+                    var html = '<input type="hidden" name="perm[]" value="' + perms[i] + '"/>';
+                    $(html).appendTo(perms_node);
+                }
+            }
+            </notempty>
+           
+            
+        }); </script>
+</block>
+<block name="css">
+    <css href="__ZTREE__/css/zTreeStyle/zTreeStyle.css"/>
+    <style type="text/css">
+        ul.ztree{
+            margin-top: 10px;
+            border: 1px solid #617775;
+            background: #f0f6e4;
+            width: 220px;
+            overflow-y: scroll;
+            overflow-x: auto;
+        }
+    </style>
+</block>

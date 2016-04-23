@@ -1,5 +1,20 @@
-<extend name="common"/>
+<extend name="Layou:common"/>
 <block name="content">
+</head>
+<body>
+<h1>
+    <span class="action-span"><a href="{:U('add')}">添加文章</a></span>
+    <span class="action-span1"><a href="{:U('index')}">文章 管理中心</a></span>
+    <span id="search_id" class="action-span1"> - {$meta_title} </span>
+    <div style="clear:both"></div>
+</h1>
+<div class="form-div">
+    <form action="{:U()}" method="get" name="searchForm">
+    <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="search" />
+    <input type="text" name="seach_name" size="15" />
+    <input type="submit" value=" 搜索 " class="button" />
+    </form>
+</div>
 <form method="post" action="{;U()}" name="listForm">
     <div class="list-div" id="listDiv">
         <table cellpadding="3" cellspacing="1">
@@ -20,7 +35,7 @@
                    {$categorys[$row["article_category_id"]-1]["name"]}
                 </td>
                 <td>{$row.sort}</td>
-                <td>{:date('Y-m-d H:i:s',$row['inputtime'])}</td>
+                <td>{$row.inputtime|date="Y-m-d H:i:s",###}</td>
                 <td><img src="__IMG__/{$row.status}.gif" /></td>
                 <td align="center">
                     <a href="{:U('edit',array('id'=>$row['id']))}" title="编辑">编辑</a> |
@@ -30,7 +45,7 @@
                     
             </foreach>
             <tr>
-                <td align="right" nowrap="true" colspan="6">
+                <td align="right" nowrap="true" colspan="7">
                     <div class="page" id="turn-page">
                         {$page_html}
                     </div>

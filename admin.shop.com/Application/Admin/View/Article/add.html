@@ -1,5 +1,20 @@
-<extend name="common"/>
+<extend name="Layou:common"/>
 <block name="content">
+</head>
+<body>
+<h1>
+    <span class="action-span"><a href="{:U('add')}">添加文章</a></span>
+    <span class="action-span1"><a href="{:U('index')}">文章 管理中心</a></span>
+    <span id="search_id" class="action-span1"> - {$meta_title} </span>
+    <div style="clear:both"></div>
+</h1>
+<div class="form-div">
+    <form action="{:U()}" method="get" name="searchForm">
+    <img src="__IMG__/icon_search.gif" width="26" height="22" border="0" alt="search" />
+    <input type="text" name="seach_name" size="15" />
+    <input type="submit" value=" 搜索 " class="button" />
+    </form>
+</div>
 <div class="main-div">
     <form method="post" action="{:U()}"enctype="multipart/form-data" >
         <table cellspacing="1" cellpadding="3" width="100%">
@@ -19,7 +34,7 @@
             <tr>
                 <td class="label">文章内容</td>
                 <td>
-                    <textarea  name="content" cols="60" rows="4"  >{$content.content}</textarea>
+                    <textarea  name="content" cols="60" rows="4"  >{$content["content"]}</textarea>
                 </td>
             </tr>
             <tr>
@@ -27,8 +42,7 @@
                 <td>
                     <select name="article_category_id">
                     <foreach name="articles" item="article">
-                         <!--<if condition='in_array($rows,$supplier["id"])'>selected="selected"</if>-->
-                        <option value="{$article.id}">{$article.name}</option>
+                        <option<eq name='rows["article_category_id"]' value='$article["id"]'>selected='selected'</eq> value="{$article.id}">{$article.name}</option>
                     </foreach>
                 </select>
                 </td>
@@ -62,6 +76,7 @@
     <script type='text/javascript'>
         $(function(){
             $(':input[name=status]').val([{$row.status|default=1}]);
+            $('option[value=article_category_id]').prop('selected','selected');
         });
     </script>
 </block>

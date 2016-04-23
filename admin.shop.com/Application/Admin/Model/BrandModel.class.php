@@ -28,4 +28,7 @@ class BrandModel extends \Think\Model {
            'page_html'=>$page_html
          );
     }
+     public function getList($field = '*') {
+        return $this->field($field)->where(array('status' => 1))->select();
+    }
 }

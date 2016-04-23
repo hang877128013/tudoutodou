@@ -3,6 +3,13 @@ namespace Admin\Controller;
 class SupplierController extends \Think\Controller {
         protected $_model=null;
         protected function _initialize() {
+            if(!session('USERINFO')){
+            if(ACTION_NAME=='login'){
+                return true;
+            }
+            $this->success('请先登录',U('Admin/login'));
+            return false;
+        }
         $meta_titles = array(
             'index'  => '供货商管理',
             'add'    => '添加供货商',
