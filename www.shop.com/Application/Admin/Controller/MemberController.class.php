@@ -136,7 +136,16 @@ class MemberController extends \Think\Controller{
      */
     public function logout(){
         session(null);
-        cookie(null);
+        cookie(NULL);
         $this->success('退出成功',U('login'));
+    }
+    
+    public function getUserName(){
+        $userinfo=  session('MEMBER_INFO');
+        if($userinfo){
+            echo json_encode($userinfo['username']);
+        }else{
+            echo json_encode(false);
+        }
     }
 }

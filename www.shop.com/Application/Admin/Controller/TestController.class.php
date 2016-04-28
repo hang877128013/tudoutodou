@@ -3,6 +3,16 @@
 namespace Admin\Controller;
 
 class TestController extends \Think\Controller {
+    public function index(){
+        $a=3;$b=3;
+//        echo $a.'+'.$b;
+        if($a=5||$b=5){
+            dump($a);
+            $b++;
+            dump($b++);
+        }
+//        echo $a.'+'.$b;
+    }
 
     public function sendSMS() {
         $flag = sendSMS('17002810533', ['code' => (string) 1033, 'product' => '仙人跳']);

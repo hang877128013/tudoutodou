@@ -78,7 +78,7 @@ class MemberModel extends \Think\Model {
             return false;
         }
         //发送激活邮件
-        if($this->_sendActiveEmail($request_data) === false){
+        if($this->sendEmail($request_data) === false){
             $this->error = '激活邮件发送失败';
             return false;
         }

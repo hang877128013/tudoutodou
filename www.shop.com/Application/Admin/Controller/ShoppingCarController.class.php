@@ -23,6 +23,23 @@ class ShoppingCarController extends \Think\Controller{
         $this->display();
     }
     public function flow2(){
-        $this->display('flow1');
+        check_login();
+        //获取默认收获地址
+        $address=M('Address')->where(['is_default'=>1])->find();
+        $this->assign('address',$address);
+        //获取送货方式
+        $deliverys=M('Delivery')->where(['status'=>1])->getField('id,name,price,intro');
+        $this->assign('deliverys',$deliverys);
+        //获取支付方式
+        $payments=M('Payment')->where(['status'=>1])->getField('id,name,intro');
+        $this->assign('payments',$payments);
+        //取出购物车数据
+        $shopings = $this->_model->getShoppingCar();
+        $this->assign('shoppings',$shopings);
+//        dump($shopings);exit;
+        //获取用户收入地址
+        $rows=D('Address')->getList();
+        $this->assign('rows',$rows);
+        $this->display('flow2');
     }
 }
